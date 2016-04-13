@@ -1,0 +1,64 @@
+#include<iostream>
+#include<fstream>
+
+
+using namespace std;
+
+
+void citire(int &n,int x[])
+{
+	int i;
+	ifstream f("citire.txt");
+	f>>n;//introduc numarul de elemente
+	for(i=1;i<=n;i++)
+		f>>x[i];//introduc elementele
+	f.close();
+}
+
+
+int verificare(int n,int y[])//verific daca mai exista submultimi posibile
+{
+	int i;
+	for(i=1;i<=n;i++)
+		if(y[i]==1)return 1;//cat timp cel putin un element din vector este 1 programul va da return 1;
+	return 0;
+}
+
+
+void afisare(int n,int y[],int x[])
+{
+	int i;
+	for(i=1;i<=n;i++)
+		if(y[i]==1)//daca pozitia corespunzatore a vectorului x[i] din vectorul y[i] este 1, afisez elemntul
+			cout<<x[i]<<" ";
+	cout<<endl;
+}
+
+
+void G_S(int n,int x[])
+{
+	int i,y[100]={0};
+	y[n]=1;//introduc prima submultime posibila
+	while(verificare(n,y))// structura cat timp ruleaza pana cand tabloul se intoarce la forma initiala (y[]={0})
+	{
+		afisare(n,y,x);//afisez pe rand fiecare submultime
+		if(y[n]==0)
+			y[n]=1;//1 + 0 = 1
+		else//1 + 1 = 1
+		{
+			for(i=n;i>=1 && y[i]==1;i--)//cat timp pozitia alaturata e 1 aceasta i-a valoarea 0 si trec la urmatoarea
+				y[i]=0;
+			y[i]=1;
+		}
+	}
+}
+
+
+int main()
+{
+	int n, x[100];
+	citire(n,x);
+	G_S(n,x);
+	system("pause");
+	return 0;
+}
